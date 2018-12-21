@@ -15,4 +15,4 @@ CREATE TABLE `tables` (
   `address` INT
 );
 
-INSERT INTO `settings` VALUES (0, "available", 1000, 800);
+INSERT INTO `settings` VALUES ("0000000000000000", "available", 1000, 800);

@@ -1,3 +1,5 @@
+import os
+from configparser import ConfigParser
 import json
 import logging
 import paho.mqtt.client as mqtt
@@ -9,6 +11,9 @@ from helpers import settings_helper
 
 def run():
     log = logging.basicConfig()
+    config = ConfigParser()
+    config.read(os.path.join(os.path.dirname(__file__), "../config.ini"))
+
     conn = sqlite3.connect('cc.db')
     conn.row_factory = sqlite3.Row
 
@@ -22,7 +27,7 @@ def run():
     # The callback for when a PUBLISH message is received from the server.
     def on_message(mqtt_client, userdata, msg):
         msg = msg.payload.decode("utf-8")
-        print(msg)
+
         try:
             msg_json = json.loads(msg)
         except json.JSONDecodeError as e:
@@ -41,7 +46,7 @@ def run():
     client.on_message = on_message
 
     try:
-        client.connect("localhost", 1883, 60)
+        client.connect(config.get("mqtt", "host"), int(config.get("mqtt", "port")), 60)
     except ConnectionError as e:
         log.error("Error when connecting to the MQTT broker: %s", e)
         exit(1)
