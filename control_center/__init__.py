@@ -13,7 +13,9 @@ if os.path.isfile('cc.db') is False:
 
     # Import some basic settings
     serialnumber = serial_helper.getserial()
-    conn.execute('UPDATE `settings` SET `device_id` = :serial', {"serial": serialnumber})
+
+    conn.execute("""UPDATE settings SET device_id = :serial""", {"serial": serialnumber})
+    conn.commit()
 
     conn.close()
 
